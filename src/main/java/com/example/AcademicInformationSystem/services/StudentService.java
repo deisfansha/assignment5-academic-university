@@ -5,6 +5,7 @@ import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 import com.example.AcademicInformationSystem.repositories.GradeQuizRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
+import com.example.AcademicInformationSystem.repositories.ScoreRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
 import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class StudentService {
     private QuizRepository quizRepository;
     @Autowired
     private GradeQuizRepository gradeQuizRepository;
+
+    @Autowired
+    private ScoreRepository scoreRepository;
     private int idNpm = 0;
     private Response response;
 
@@ -89,6 +93,11 @@ public class StudentService {
 
     public List<Student> viewStudent(){
         return studentRepository.findAllNotDeleted();
+    }
+
+    public List<Scores> viewScoresForStudent(Long studentId) {
+        // Mengambil semua nilai skor (scores) untuk mahasiswa dengan ID tertentu
+        return scoreRepository.findByStudentId(studentId);
     }
 
     public Student softDelete(Long id, Response response){
@@ -166,6 +175,39 @@ public class StudentService {
         response.setData(gradeQuiz);
         return true;
 
+    }
+
+    public boolean addScore(Long studentId, Long courseId, Long quizId, ScoreRequest scoreRequest, Response response){
+        Student student = studentRepository.findById(studentId).orElse(null);
+        Course course = courseRepository.findById(courseId).orElse(null);
+        Quiz quiz = quizRepository.findById(quizId).orElse(null);
+
+        if (student == null){
+            response.setMessage("Student Not Found");
+            return false;
+        }
+
+        if (course == null){
+            response.setMessage("Course Not Found");
+            return false;
+        }
+
+        if (quiz == null){
+            response.setMessage("Quiz Not Found");
+            return false;
+        }
+
+        Scores score = new Scores();
+
+        score.setStudent(student);
+        score.setCourse(course);
+        score.setQuiz(quiz);
+        score.setValue(scoreRequest.getScore());
+
+        response.setMessage("Success");
+        response.setData(score);
+        scoreRepository.save(score);
+        return true;
     }
 
     private boolean validateInputStudent(String nameStudent, String genderStudent, String numberPhone){

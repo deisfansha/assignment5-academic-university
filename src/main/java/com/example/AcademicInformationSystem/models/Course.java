@@ -25,6 +25,10 @@ public class Course {
     )
     private List<Quiz> quizes;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Scores> scores;
+
     public Course(){
 
     }
@@ -72,5 +76,13 @@ public class Course {
 
     public void setQuizes(List<Quiz> quizes) {
         this.quizes = quizes;
+    }
+
+    public List<Scores> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Scores> scores) {
+        this.scores = scores;
     }
 }

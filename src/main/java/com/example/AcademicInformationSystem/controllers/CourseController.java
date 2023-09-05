@@ -75,4 +75,17 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+    @GetMapping("/{studentId}")
+    public ResponseEntity viewCourseStudent(@PathVariable Long studentId){
+        List<Course> courseList = courseService.viewCourse();
+        if (courseList.isEmpty()){
+            response.setMessage("Data Is Empty");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            response.setData(courseList);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
 }

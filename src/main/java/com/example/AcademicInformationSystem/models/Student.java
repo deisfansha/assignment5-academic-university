@@ -19,7 +19,7 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "student_courses",
@@ -28,6 +28,9 @@ public class Student {
     )
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Scores> scores;
 
     public Student(){
     }

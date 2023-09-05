@@ -18,6 +18,9 @@ public class Quiz {
     @ManyToMany(mappedBy = "quizes")
     private List<Course> courses;
 
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<Scores> scores;
+
     public Long getId() {
         return Id;
     }

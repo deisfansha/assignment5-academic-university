@@ -53,6 +53,15 @@
 						"url": "http://localhost:8080/students/scores/1/2/3"
 					},
 					"response": []
+				},
+				{
+					"name": "Get Score Student",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/students/23/scores"
+					},
+					"response": []
 				}
 			]
 		},
@@ -192,6 +201,14 @@
 							}
 						},
 						"url": "http://localhost:8080/students/enroll"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses Student",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
