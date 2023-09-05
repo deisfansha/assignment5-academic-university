@@ -3,7 +3,6 @@ package com.example.AcademicInformationSystem.models;
 import javax.persistence.*;
 
 public class CourseStudents {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

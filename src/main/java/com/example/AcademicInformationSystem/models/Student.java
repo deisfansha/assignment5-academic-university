@@ -19,7 +19,6 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "student_courses",

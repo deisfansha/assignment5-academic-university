@@ -3,15 +3,12 @@ package com.example.AcademicInformationSystem.services;
 import com.example.AcademicInformationSystem.models.*;
 import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
-import com.example.AcademicInformationSystem.repositories.GradeQuizRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
 import com.example.AcademicInformationSystem.repositories.ScoreRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
-import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +23,6 @@ public class StudentService {
     private CourseRepository courseRepository;
     @Autowired
     private QuizRepository quizRepository;
-    @Autowired
-    private GradeQuizRepository gradeQuizRepository;
 
     @Autowired
     private ScoreRepository scoreRepository;
@@ -96,8 +91,12 @@ public class StudentService {
     }
 
     public List<Scores> viewScoresForStudent(Long studentId) {
-        // Mengambil semua nilai skor (scores) untuk mahasiswa dengan ID tertentu
-        return scoreRepository.findByStudentId(studentId);
+        List<Scores> scores = scoreRepository.findByStudentId(studentId);
+        if (scores.isEmpty()) {
+            return null;
+        }
+
+        return scores;
     }
 
     public Student softDelete(Long id, Response response){
@@ -142,39 +141,6 @@ public class StudentService {
         student.getCourses().add(course);
         studentRepository.save(student);
         return true;
-    }
-
-    public boolean inputScores(Long studentId, Long courseId, Long quizId, ScoreRequest scoreRequest, Response response) {
-        Student students = studentRepository.findById(studentId).orElse(null);
-        Course existingCourse = courseRepository.findById(courseId).orElse(null);
-        Quiz existingQuiz = quizRepository.findById(quizId).orElse(null);
-
-        if(students == null){
-            response.setMessage("Student Not Found");
-            return false;
-        }
-
-        if(existingCourse == null){
-            response.setMessage("Course Not Found");
-            return false;
-        }
-
-        if(existingQuiz == null){
-            response.setMessage("Quiz Not Found");
-            return false;
-        }
-
-        GradeQuiz gradeQuiz = new GradeQuiz();
-        gradeQuiz.setStudent(students);
-        gradeQuiz.setCourse(existingCourse);
-        gradeQuiz.setQuiz(existingQuiz);
-        gradeQuiz.setScore(scoreRequest.getScore());
-        gradeQuizRepository.save(gradeQuiz);
-
-        response.setMessage("Success");
-        response.setData(gradeQuiz);
-        return true;
-
     }
 
     public boolean addScore(Long studentId, Long courseId, Long quizId, ScoreRequest scoreRequest, Response response){
