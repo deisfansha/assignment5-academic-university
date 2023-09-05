@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "bccfca7e-db95-4881-b73a-2b53597d4b57",
+		"name": "Academic University",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26685604"
+	},
+	"item": [
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Create Student",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Deisfansha\",\r\n   \"npm\": \"NPM123456\",\r\n   \"gender\": \"Male\",\r\n   \"phoneNumber\": \"089693871389\",\r\n   \"department\": {\r\n       \"id\": 2\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/students"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Student",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/students"
+					},
+					"response": []
+				},
+				{
+					"name": "Soft Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/students/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Input Score",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/students/scores/1/2/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Department",
+			"item": [
+				{
+					"name": "Get All Department",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/departments"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Department",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/departments"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Department",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:8080/departments/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Soft Delete Department",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/departments/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/courses"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Bahasa Inggris\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/courses"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Bahasa Pemrograman\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/courses/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Soft Delete Course",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/courses/3"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Quiz In Course",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Bahasa Inggris\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/courses/quizes/7"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course Student",
+			"item": [
+				{
+					"name": "Create Course Student",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"studentId\": 4,\r\n   \"courseId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/students/enroll"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quiz",
+			"item": [
+				{
+					"name": "Get All Quiz",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/departments"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quiz",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Quiz 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/quizes"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quiz",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:8080/quizes/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Soft Delete Quiz",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/quizes/3"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
