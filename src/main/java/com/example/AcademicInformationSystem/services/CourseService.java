@@ -1,11 +1,12 @@
 package com.example.AcademicInformationSystem.services;
 
 import com.example.AcademicInformationSystem.models.Course;
-import com.example.AcademicInformationSystem.models.Department;
 import com.example.AcademicInformationSystem.models.Quiz;
 import com.example.AcademicInformationSystem.models.Response;
 import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,14 @@ public class CourseService {
 //            return null;
 //        }
 
-        if (existingCourse !=null){
+        ObjectMapper object = new ObjectMapper();
+
+        try {
+            System.out.println(object.writeValueAsString(existingCourse));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if (existingCourse.size()>=1){
             response.setMessage("Data Is Already Exists");
             return null;
         }
@@ -71,14 +79,12 @@ public class CourseService {
 
     public Course softDelete(Long id, Response response){
         Optional<Course> existingCourse = courseRepository.findById(id);
-
         if (!existingCourse.isPresent()) {
             response.setMessage("Course Not Found");
             return null;
         }
 
         Course existingData = existingCourse.get();
-
         existingData.setDelete(true);
         // Save course deleted
         response.setMessage("Success");

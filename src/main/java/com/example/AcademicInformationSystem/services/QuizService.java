@@ -22,7 +22,7 @@ public class QuizService {
     public Quiz createQuiz(Quiz quiz, Response response){
         List<Quiz> existingQuiz = quizRepository.findByName(quiz.getName());
 
-        if (existingQuiz !=null){
+        if (existingQuiz.size()>=1){
             response.setMessage("Data Is Already Exists");
             return null;
         }

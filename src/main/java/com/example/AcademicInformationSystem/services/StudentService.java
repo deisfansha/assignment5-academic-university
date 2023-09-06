@@ -6,6 +6,8 @@ import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
 import com.example.AcademicInformationSystem.repositories.ScoreRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +53,11 @@ public class StudentService {
             return null;
         }
 
+        if (!trimmedPhoneNumber.matches("^[0-9]{8,13}$")){
+            response.setMessage("Format Number appropriate");
+            return null;
+        }
+
         if (!(trimmedGender.equalsIgnoreCase("Laki-Laki")|| trimmedGender.equalsIgnoreCase("Perempuan"))){
             response.setMessage("There only 2 Gender");
             return null;
@@ -78,9 +85,13 @@ public class StudentService {
 
         // Set NPM
         String npm = departmentId + String.valueOf(currentYear) + "00"+codeNpm;
-        student.setNpm(npm);
 
+        student.setName(trimmedName);
+        student.setGender(trimmedGender);
+        student.setPhoneNumber(trimmedPhoneNumber);
+        student.setNpm(npm);
         student.setDelete(false);
+
         response.setMessage("Success");
         response.setData(student);
         return studentRepository.save(student);
@@ -144,29 +155,41 @@ public class StudentService {
     }
 
     public boolean addScore(Long studentId, Long courseId, Long quizId, ScoreRequest scoreRequest, Response response){
-        Student student = studentRepository.findById(studentId).orElse(null);
-        Course course = courseRepository.findById(courseId).orElse(null);
+        List<Scores> student = scoreRepository.findByStudentId(studentId);
+        List<Scores> course = scoreRepository.findByCorurseId(courseId);
         Quiz quiz = quizRepository.findById(quizId).orElse(null);
-
-        if (student == null){
+//        List<Scores> scores = scoreRepository.findByStudentsIdCourseIdAndQuizId(studentId, courseId, quizId);
+        if (student.isEmpty()){
             response.setMessage("Student Not Found");
             return false;
         }
 
-        if (course == null){
-            response.setMessage("Course Not Found");
+        if (course.isEmpty()){
+            response.setMessage("Course In Student Not Found");
             return false;
         }
 
-        if (quiz == null){
-            response.setMessage("Quiz Not Found");
+//        ObjectMapper object = new ObjectMapper();
+//        try {
+//            System.out.println(object.writeValueAsString(scores));
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        if (course.get().getQuizes().isEmpty()){
+//            response.setMessage("Quiz In Course Not Found");
+//            return false;
+//        }
+
+        if (scoreRequest.getScore()<0 || scoreRequest.getScore()>=100){
+            response.setMessage("Format is not appropriate");
             return false;
         }
 
         Scores score = new Scores();
 
-        score.setStudent(student);
-        score.setCourse(course);
+        score.setStudent((Student) student);
+        score.setCourse((Course) course);
         score.setQuiz(quiz);
         score.setValue(scoreRequest.getScore());
 

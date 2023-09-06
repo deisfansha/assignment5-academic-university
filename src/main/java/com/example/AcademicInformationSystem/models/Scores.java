@@ -1,6 +1,7 @@
 package com.example.AcademicInformationSystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,18 +14,21 @@ import javax.persistence.ManyToOne;
 public class Scores {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnoreProperties({"courses", "id", "gender", "phoneNumber"})
     private Student student;
 
-    @JsonIgnore
     @ManyToOne
+    @JsonIgnoreProperties({"id","quizes"})
     @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne
+    @JsonIgnoreProperties({"id"})
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
