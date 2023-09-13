@@ -19,17 +19,6 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-    @ManyToMany
-    @JoinTable(
-            name = "student_courses",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Course> courses;
-
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<Scores> scores;
 
     public Student(){
     }
@@ -84,7 +73,6 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-    @JsonIgnore
     public boolean isDelete() {
         return isDelete;
     }
@@ -101,11 +89,4 @@ public class Student {
         this.department = department;
     }
 
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
 }

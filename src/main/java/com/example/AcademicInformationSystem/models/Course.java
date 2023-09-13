@@ -11,23 +11,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @JsonIgnore
     private boolean isDelete;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL)
-    private List<Student> students;
-
-    @ManyToMany
-    @JoinTable(
-            name = "quiz_courses",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "quiz_id")
-    )
-    private List<Quiz> quizes;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Scores> scores;
 
     public Course(){
 
@@ -57,32 +42,9 @@ public class Course {
     public boolean isDelete() {
         return isDelete;
     }
-    @JsonIgnore
+
     public void setDelete(boolean delete) {
         isDelete = delete;
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    public List<Quiz> getQuizes() {
-        return quizes;
-    }
-
-    public void setQuizes(List<Quiz> quizes) {
-        this.quizes = quizes;
-    }
-
-    public List<Scores> getScores() {
-        return scores;
-    }
-
-    public void setScores(List<Scores> scores) {
-        this.scores = scores;
-    }
 }

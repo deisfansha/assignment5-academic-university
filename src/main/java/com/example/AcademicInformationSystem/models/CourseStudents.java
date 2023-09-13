@@ -7,8 +7,10 @@ public class CourseStudents {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "id_student", referencedColumnName = "id")
     private Student student;
     @ManyToOne
+    @JoinColumn(name = "id_course", referencedColumnName = "id")
     private Course course;
 
     public CourseStudents(){
