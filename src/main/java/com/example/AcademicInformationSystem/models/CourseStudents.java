@@ -1,5 +1,6 @@
 package com.example.AcademicInformationSystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -12,7 +13,6 @@ public class CourseStudents {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "id_student", referencedColumnName = "id")
-    @JsonIgnoreProperties({ "id", "" })
     private Student student;
     @ManyToOne
     @JoinColumn(name = "id_course", referencedColumnName = "id")
@@ -63,6 +63,7 @@ public class CourseStudents {
         isActive = active;
     }
 
+    @JsonIgnore
     public Boolean getDeleted() {
         return isDeleted;
     }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +25,8 @@ public class CourseStudentController {
     @PostMapping("")
     public ResponseEntity saveStudentCourse(@RequestBody CourseStudents courseStudents){
         Boolean added = courseStudentService.addStudentCourse(courseStudents, response);
-        response.setData(courseStudents);
-        courseStudentService.setResponse(response);
         if (added){
+            response.setData(courseStudents);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -39,6 +40,18 @@ public class CourseStudentController {
         }else {
             response.setMessage("Success");
             response.setData(courseStudentService.getAll());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity updateActived(@PathVariable Long id, @RequestBody CourseStudents courseStudents){
+        Boolean updated = courseStudentService.updateActive(id, courseStudents, response);
+        if (!updated){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            response.setData(courseStudentService.getById(id));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
