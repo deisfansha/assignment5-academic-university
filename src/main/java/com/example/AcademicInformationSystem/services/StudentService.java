@@ -4,10 +4,7 @@ import com.example.AcademicInformationSystem.models.*;
 import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
-import com.example.AcademicInformationSystem.repositories.ScoreRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +22,6 @@ public class StudentService {
     private CourseRepository courseRepository;
     @Autowired
     private QuizRepository quizRepository;
-
-    @Autowired
-    private ScoreRepository scoreRepository;
     private int idNpm = 0;
     private Response response;
 
@@ -101,13 +95,8 @@ public class StudentService {
         return studentRepository.findAllNotDeleted();
     }
 
-    public List<Scores> viewScoresForStudent(Long studentId) {
-        List<Scores> scores = scoreRepository.findByStudentId(studentId);
-        if (scores.isEmpty()) {
-            return null;
-        }
-
-        return scores;
+    public Student getStudentById(Long id){
+        return studentRepository.findById(id).get();
     }
 
     public Student softDelete(Long id, Response response){
@@ -125,78 +114,6 @@ public class StudentService {
         response.setMessage("Success");
         response.setData(existingStudent);
         return studentRepository.save(existingData);
-    }
-
-    public boolean enrollStudentInCourse(EnrollRequest enrollRequest, Response response) {
-        Long studentId = enrollRequest.getStudentId();
-        Long courseId = enrollRequest.getCourseId();
-        Student student = studentRepository.findById(studentId).orElse(null);
-        if(student == null){
-            response.setMessage("Student Not Found");
-            return false;
-        }
-
-        Course course = courseRepository.findById(courseId).orElse(null);
-        if(course == null){
-            response.setMessage("Course Not Found");
-            return false;
-        }
-
-        // Cek apakah mahasiswa sudah terdaftar pada mata kuliah ini
-        if (student.getCourses().contains(course)) {
-            response.setMessage("Student Is Already Exists In Course");
-            return false;
-        }
-
-        // Lakukan pendaftaran mahasiswa ke mata kuliah
-        student.getCourses().add(course);
-        studentRepository.save(student);
-        return true;
-    }
-
-    public boolean addScore(Long studentId, Long courseId, Long quizId, ScoreRequest scoreRequest, Response response){
-        List<Scores> student = scoreRepository.findByStudentId(studentId);
-        List<Scores> course = scoreRepository.findByCorurseId(courseId);
-        Quiz quiz = quizRepository.findById(quizId).orElse(null);
-//        List<Scores> scores = scoreRepository.findByStudentsIdCourseIdAndQuizId(studentId, courseId, quizId);
-        if (student.isEmpty()){
-            response.setMessage("Student Not Found");
-            return false;
-        }
-
-        if (course.isEmpty()){
-            response.setMessage("Course In Student Not Found");
-            return false;
-        }
-
-//        ObjectMapper object = new ObjectMapper();
-//        try {
-//            System.out.println(object.writeValueAsString(scores));
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if (course.get().getQuizes().isEmpty()){
-//            response.setMessage("Quiz In Course Not Found");
-//            return false;
-//        }
-
-        if (scoreRequest.getScore()<0 || scoreRequest.getScore()>=100){
-            response.setMessage("Format is not appropriate");
-            return false;
-        }
-
-        Scores score = new Scores();
-
-        score.setStudent((Student) student);
-        score.setCourse((Course) course);
-        score.setQuiz(quiz);
-        score.setValue(scoreRequest.getScore());
-
-        response.setMessage("Success");
-        response.setData(score);
-        scoreRepository.save(score);
-        return true;
     }
 
     private boolean validateInputStudent(String nameStudent, String genderStudent, String numberPhone){

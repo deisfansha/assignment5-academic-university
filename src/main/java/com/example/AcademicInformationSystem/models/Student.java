@@ -46,7 +46,7 @@ public class Student {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getNpm() {
@@ -70,7 +70,7 @@ public class Student {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.trim();
     }
 
     public boolean isDelete() {

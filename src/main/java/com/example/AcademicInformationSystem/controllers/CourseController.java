@@ -65,17 +65,6 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/quizes/{id}")
-    public ResponseEntity addQuiz(@PathVariable Long id, @RequestBody Quiz quiz){
-        boolean newCourse = courseService.addQuizToCourse(id, quiz, response);
-        courseService.setResponse(response);
-        if (newCourse){
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
     @GetMapping("/{studentId}")
     public ResponseEntity viewCourseStudent(@PathVariable Long studentId){
         List<Course> courseList = courseService.viewCourse();

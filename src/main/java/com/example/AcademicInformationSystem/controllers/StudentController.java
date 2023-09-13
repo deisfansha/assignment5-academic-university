@@ -50,41 +50,6 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/enroll")
-    public ResponseEntity enrollInCourse(@RequestBody EnrollRequest enrollRequest) {
-        boolean enroll = studentService.enrollStudentInCourse(enrollRequest, response);
-        studentService.setResponse(response);
-        if (enroll){
-            response.setMessage("Success");
-            response.setData(enrollRequest);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
 
-    @PostMapping("/add/{studentId}/{courseId}/{quizId}")
-    public ResponseEntity addScore(@PathVariable Long studentId, @PathVariable Long courseId, @PathVariable Long quizId, @RequestBody ScoreRequest scoreRequest) {
-        boolean score = studentService.addScore(studentId, courseId, quizId,scoreRequest , response);
-        studentService.setResponse(response);
-        if (score){
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
-    @GetMapping("/{studentId}/scores")
-    public ResponseEntity getScoresForStudent(@PathVariable Long studentId) {
-        List<Scores> scores = studentService.viewScoresForStudent(studentId);
-        if (scores == null){
-            response.setMessage("Data Is Empty");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }else {
-            response.setMessage("Success");
-            response.setData(scores);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }
-    }
 
 }

@@ -91,30 +91,6 @@ public class CourseService {
         response.setData(existingCourse);
         return courseRepository.save(existingData);
     }
-
-    public boolean addQuizToCourse(Long courseId, Quiz quiz, Response response) {
-        List<Quiz> quizList = quizRepository.findByName(quiz.getName());
-        Optional<Course> optionalCourse = courseRepository.findById(courseId);
-
-        if (!optionalCourse.isPresent()) {
-            response.setMessage("Course Not Found");
-            return false;
-        }
-
-        if (quizList.isEmpty()) {
-            response.setMessage("Quiz Not Found");
-            return false;
-        }
-
-        Quiz existingQuiz = quizList.get(0);
-
-        Course course = optionalCourse.get();
-        course.getQuizes().add(existingQuiz); // Add the quiz to the course's list of quizzes
-        courseRepository.save(course);
-        return true;
-    }
-
-
     private boolean validateFounded(Optional<Course> existingCourse){
         if (!existingCourse.isPresent()) {
             response.setMessage("Department Not Found");

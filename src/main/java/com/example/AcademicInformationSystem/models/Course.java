@@ -3,7 +3,6 @@ package com.example.AcademicInformationSystem.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Course {
@@ -11,8 +10,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @JsonIgnore
-    private boolean isDelete;
+    private Boolean isActive = true;
+    private Boolean isDelete;
 
     public Course(){
 
@@ -38,13 +37,20 @@ public class Course {
     public void setName(String name) {
         this.name = name;
     }
+    @JsonIgnore
+    public Boolean getActive() {
+        return isActive;
+    }
 
-    public boolean isDelete() {
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+    @JsonIgnore
+    public Boolean getDelete() {
         return isDelete;
     }
 
-    public void setDelete(boolean delete) {
+    public void setDelete(Boolean delete) {
         isDelete = delete;
     }
-
 }

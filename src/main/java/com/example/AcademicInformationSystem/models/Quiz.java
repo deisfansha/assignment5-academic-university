@@ -14,13 +14,6 @@ public class Quiz {
     private String name;
     private boolean isDelete;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "quizes")
-    private List<Course> courses;
-
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private List<Scores> scores;
-
     public Long getId() {
         return Id;
     }
@@ -35,14 +28,6 @@ public class Quiz {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
     }
 
     @JsonIgnore
