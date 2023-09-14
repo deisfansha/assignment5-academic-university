@@ -1,5 +1,6 @@
 package com.example.AcademicInformationSystem.controllers;
 
+import com.example.AcademicInformationSystem.dto.request.DtoStudentCourseRequest;
 import com.example.AcademicInformationSystem.models.CourseStudents;
 import com.example.AcademicInformationSystem.models.Response;
 import com.example.AcademicInformationSystem.models.Student;
@@ -23,12 +24,12 @@ public class CourseStudentController {
     private CourseStudentService courseStudentService;
     private Response response = new Response();
     @PostMapping("")
-    public ResponseEntity saveStudentCourse(@RequestBody CourseStudents courseStudents){
+    public ResponseEntity saveStudentCourse(@RequestBody DtoStudentCourseRequest courseStudents){
         Boolean added = courseStudentService.addStudentCourse(courseStudents, response);
         if (added){
-            response.setData(courseStudents);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }else {
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -48,10 +49,10 @@ public class CourseStudentController {
     public ResponseEntity updateActived(@PathVariable Long id, @RequestBody CourseStudents courseStudents){
         Boolean updated = courseStudentService.updateActive(id, courseStudents, response);
         if (!updated){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");
-            response.setData(courseStudentService.getById(id));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }

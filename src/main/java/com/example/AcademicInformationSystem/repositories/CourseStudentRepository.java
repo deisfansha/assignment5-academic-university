@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CourseStudentRepository extends JpaRepository<CourseStudents, Long> {
-    List<CourseStudents> findAllByIsDeletedIsTrue();
+    List<CourseStudents> findAllByIsDeletedIsTrueAndIsActiveTrue();
     Optional<CourseStudents> findFirstByStudent_IdAndCourse_Id(Long studentId, Long courseId);
 }
