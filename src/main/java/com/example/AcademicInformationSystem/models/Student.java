@@ -23,15 +23,15 @@ public class Student {
     public Student(){
     }
 
-    public Student(Long id, String name, String npm, String gender, String phoneNumber, boolean isDelete, Department department) {
-        this.id = id;
-        this.name = name;
-        this.npm = npm;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.isDelete = isDelete;
-        this.department = department;
-    }
+//    public Student(Long id, String name, String npm, String gender, String phoneNumber, boolean isDelete, Department department) {
+//        this.id = id;
+//        this.name = name;
+//        this.npm = npm;
+//        this.gender = gender;
+//        this.phoneNumber = phoneNumber;
+//        this.isDelete = isDelete;
+//        this.department = department;
+//    }
 
     public Long getId() {
         return id;

@@ -1,8 +1,9 @@
 package com.example.AcademicInformationSystem.controllers;
 
+import com.example.AcademicInformationSystem.dto.request.DtoStudentRequest;
+import com.example.AcademicInformationSystem.dto.response.DtoStudentResponse;
 import com.example.AcademicInformationSystem.models.*;
 import com.example.AcademicInformationSystem.services.StudentService;
-import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +17,19 @@ public class StudentController {
     private StudentService studentService;
     private Response response = new Response();
     @PostMapping("")
-    public ResponseEntity saveStudent(@RequestBody Student student){
-        Student newStudent = studentService.createStudent(student, response);
-        studentService.setResponse(response);
+    public ResponseEntity saveStudent(@RequestBody DtoStudentRequest studentRequest){
+        Student newStudent = studentService.createStudent(studentRequest, response);
         if (newStudent == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
+            response.setMessage("Success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 
     @GetMapping("")
     public ResponseEntity viewAll(){
-        List<Student> studentList = studentService.viewStudent();
+        List<DtoStudentResponse> studentList = studentService.viewStudent();
         if (studentList.isEmpty()){
             response.setMessage("Data Is Empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -42,7 +43,6 @@ public class StudentController {
     @DeleteMapping("/{id}")
     public ResponseEntity softDeletedDepartment(@PathVariable Long id){
         Student newStudent = studentService.softDelete(id, response);
-        studentService.setResponse(response);
         if (newStudent == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {

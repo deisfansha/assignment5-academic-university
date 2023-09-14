@@ -14,15 +14,12 @@ public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "id_student_course", referencedColumnName = "id")
     private CourseStudents courseStudents;
-
     @ManyToOne
     @JoinColumn(name = "id_quiz", referencedColumnName = "id")
     private Quiz quiz;
-
     private Integer grade;
     private Boolean isDeleted = true;
 
