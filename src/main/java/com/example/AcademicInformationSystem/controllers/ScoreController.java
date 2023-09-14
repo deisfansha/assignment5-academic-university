@@ -1,5 +1,6 @@
 package com.example.AcademicInformationSystem.controllers;
 
+import com.example.AcademicInformationSystem.dto.request.DtoScoreRequest;
 import com.example.AcademicInformationSystem.models.Response;
 import com.example.AcademicInformationSystem.models.Score;
 import com.example.AcademicInformationSystem.services.ScoreService;
@@ -21,13 +22,13 @@ public class ScoreController {
     private ScoreService scoreService;
     private Response response = new Response();
     @PostMapping("")
-    public ResponseEntity saveStudentCourse(@RequestBody Score scores){
+    public ResponseEntity saveStudentScore(@RequestBody DtoScoreRequest scores){
         Boolean added = scoreService.addScore(scores, response);
         if (added){
             response.setMessage("Success");
-            response.setData(scores);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }else {
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
