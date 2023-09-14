@@ -34,13 +34,13 @@ public class ScoreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateActived(@PathVariable Long id, @RequestBody Score score){
-        Boolean updated = scoreService.updateScore(id, score, response);
+    public ResponseEntity updateActived(@PathVariable Long id, @RequestBody DtoScoreRequest scoreRequest){
+        Boolean updated = scoreService.updateScore(id, scoreRequest, response);
         if (!updated){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");
-            response.setData(scoreService.getById(id));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
@@ -48,7 +48,7 @@ public class ScoreController {
     @GetMapping("")
     public ResponseEntity viewAll(){
         if (scoreService.getAll() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Success", null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Data Is Empty", null));
         }else {
             response.setMessage("Success");
             response.setData(scoreService.getAll());

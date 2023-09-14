@@ -1,10 +1,16 @@
 package com.example.AcademicInformationSystem.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DtoScoreResponse {
     private String npm;
+    @JsonProperty("name")
     private String nameStudent;
+    @JsonProperty("department")
     private String nameDepartment;
+    @JsonProperty("course")
     private String nameCourse;
+    @JsonProperty("quiz")
     private String nameQuiz;
     private Integer grade;
 

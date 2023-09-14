@@ -8,6 +8,10 @@ import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -84,13 +88,24 @@ public class StudentService {
         return studentList;
     }
 
+    public Page<DtoStudentResponse> pageView(int page, int limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result =  studentRepository.findAll(pageable);
+        List<DtoStudentResponse> studentList = new ArrayList<>();
+        for (Student students: result.getContent()){
+            DtoStudentResponse studentResponse = new DtoStudentResponse(students.getNpm(), students.getName(), students.getGender(), students.getPhoneNumber(), students.getDepartment().getName());
+            studentList.add(studentResponse);
+        }
+        return new PageImpl(studentList, PageRequest.of(page, limit), result.getTotalPages());
+    }
+
     public Boolean updateStudent(Long id, DtoStudentRequest studentRequest,Response response){
         Optional<Student> existingStudent = studentRepository.findById(id);
 
         if (!existingStudent.isPresent()){
             response.setMessage("Student Not Found");
             return false;
-        } else if (!studentRequest.getName().matches("^[a-zA-Z -]*$") || !studentRequest.getGender().matches("^[a-zA-Z -]*$")){
+        } else if (!studentRequest.getName().matches("^[a-zA-Z -]*$")){
             response.setMessage("Can only input the alphabet");
             return false;
         } else if (!studentRequest.getPhoneNumber().matches("^[0-9]{8,13}$")){

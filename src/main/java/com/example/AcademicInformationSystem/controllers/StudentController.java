@@ -5,6 +5,7 @@ import com.example.AcademicInformationSystem.dto.response.DtoStudentResponse;
 import com.example.AcademicInformationSystem.models.*;
 import com.example.AcademicInformationSystem.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,19 @@ public class StudentController {
     @GetMapping("")
     public ResponseEntity viewAll(){
         List<DtoStudentResponse> studentList = studentService.viewStudent();
+        if (studentList.isEmpty()){
+            response.setMessage("Data Is Empty");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            response.setData(studentList);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity pageViewAll(@RequestParam int page, @RequestParam int limit){
+        Page<DtoStudentResponse> studentList = studentService.pageView(page, limit);
         if (studentList.isEmpty()){
             response.setMessage("Data Is Empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

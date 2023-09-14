@@ -1,5 +1,7 @@
 package com.example.AcademicInformationSystem.dto.response;
 
+import com.example.AcademicInformationSystem.models.Student;
+
 public class DtoStudentResponse {
     private String npm;
     private String name;
@@ -13,6 +15,9 @@ public class DtoStudentResponse {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.nameDepartment = nameDepartment;
+    }
+
+    public DtoStudentResponse(Student students) {
     }
 
     public String getNpm() {
