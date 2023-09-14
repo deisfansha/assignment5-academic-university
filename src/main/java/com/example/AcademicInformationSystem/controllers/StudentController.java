@@ -40,6 +40,18 @@ public class StudentController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateStudent(@PathVariable Long id, @RequestBody DtoStudentRequest studentRequest){
+        Boolean updated = studentService.updateStudent(id, studentRequest, response);
+        if (!updated){
+            response.setData(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity softDeletedDepartment(@PathVariable Long id){
         Student newStudent = studentService.softDelete(id, response);

@@ -1,10 +1,15 @@
 package com.example.AcademicInformationSystem.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DtoStudentRequest {
     private String name;
-    private String phone_number;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
     private String gender;
-    private Long code_department;
+
+    @JsonProperty("code_department")
+    private Long codeDepartment;
 
     public DtoStudentRequest(){
 
@@ -18,20 +23,20 @@ public class DtoStudentRequest {
         this.name = name;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public Long getCode_department() {
-        return code_department;
+    public Long getCodeDepartment() {
+        return codeDepartment;
     }
 
-    public void setCode_department(Long code_department) {
-        this.code_department = code_department;
+    public void setCodeDepartment(Long codeDepartment) {
+        this.codeDepartment = codeDepartment;
     }
 
     public String getGender() {

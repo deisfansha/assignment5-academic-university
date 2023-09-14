@@ -7,8 +7,6 @@ import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +28,16 @@ public class StudentService {
     private int idNpm = 0;
 
     public Student createStudent(DtoStudentRequest studentRequest, Response response) {
-        Optional<Department> existingDepartment = departmentRepository.findById(studentRequest.getCode_department());
-        List<Student> existingStudentsWithPhoneNumber = studentRepository.findByPhoneNumber(studentRequest.getPhone_number());
+        Optional<Department> existingDepartment = departmentRepository.findById(studentRequest.getCodeDepartment());
+        List<Student> existingStudentsWithPhoneNumber = studentRepository.findByPhoneNumber(studentRequest.getPhoneNumber());
 
-        if (studentRequest.getName().isEmpty()|| studentRequest.getGender().isEmpty() || studentRequest.getPhone_number().isEmpty()){
+        if (studentRequest.getName().isEmpty()|| studentRequest.getGender().isEmpty() || studentRequest.getPhoneNumber().isEmpty()){
             response.setMessage("All data must be filled in");
             return null;
         } else if (!studentRequest.getName().matches("^[a-zA-Z -]*$") || !studentRequest.getGender().matches("^[a-zA-Z -]*$")){
             response.setMessage("Can only input the alphabet");
             return null;
-        }else if (!studentRequest.getPhone_number().matches("^[0-9]{8,13}$")){
+        }else if (!studentRequest.getPhoneNumber().matches("^[0-9]{8,13}$")){
             response.setMessage("Format Number appropriate");
             return null;
         } else if (!(studentRequest.getGender().equalsIgnoreCase("Laki-Laki")|| studentRequest.getGender().equalsIgnoreCase("Perempuan"))){
@@ -63,12 +61,12 @@ public class StudentService {
         int codeNpm = Integer.parseInt(last) +1;
 
         // Set NPM
-        String npm = studentRequest.getCode_department() + String.valueOf(currentYear) + "00"+codeNpm;
+        String npm = studentRequest.getCodeDepartment() + String.valueOf(currentYear) + "00"+codeNpm;
 
         Student newStudent = new Student();
         newStudent.setName(studentRequest.getName());
         newStudent.setGender(studentRequest.getGender());
-        newStudent.setPhoneNumber(studentRequest.getPhone_number());
+        newStudent.setPhoneNumber(studentRequest.getPhoneNumber());
         newStudent.setNpm(npm);
         newStudent.setDepartment(existingDepartment.get());
 
@@ -83,13 +81,32 @@ public class StudentService {
             DtoStudentResponse studentResponse = new DtoStudentResponse(students.getNpm(), students.getName(), students.getGender(), students.getPhoneNumber(), students.getDepartment().getName());
             studentList.add(studentResponse);
         }
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            System.out.println(objectMapper.writeValueAsString(studentList));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
         return studentList;
+    }
+
+    public Boolean updateStudent(Long id, DtoStudentRequest studentRequest,Response response){
+        Optional<Student> existingStudent = studentRepository.findById(id);
+
+        if (!existingStudent.isPresent()){
+            response.setMessage("Student Not Found");
+            return false;
+        } else if (!studentRequest.getName().matches("^[a-zA-Z -]*$") || !studentRequest.getGender().matches("^[a-zA-Z -]*$")){
+            response.setMessage("Can only input the alphabet");
+            return false;
+        } else if (!studentRequest.getPhoneNumber().matches("^[0-9]{8,13}$")){
+            response.setMessage("Format Number appropriate");
+            return false;
+        }
+
+        existingStudent.get().setName(studentRequest.getName());
+        existingStudent.get().setPhoneNumber(studentRequest.getPhoneNumber());
+        studentRepository.save(existingStudent.get());
+
+        DtoStudentResponse studentResponse = new DtoStudentResponse(existingStudent.get().getNpm(),
+                existingStudent.get().getName(), existingStudent.get().getGender(),
+                existingStudent.get().getPhoneNumber(), existingStudent.get().getDepartment().getName());
+        response.setData(studentResponse);
+        return true;
     }
 
     public Student getStudentById(Long id){
@@ -107,30 +124,15 @@ public class StudentService {
         Student existingData = existingStudent.get();
 
         existingData.setDelete(true);
+        DtoStudentResponse studentResponse = new DtoStudentResponse(existingStudent.get().getNpm(),
+                existingStudent.get().getName(), existingStudent.get().getGender(),
+                existingStudent.get().getPhoneNumber(), existingStudent.get().getDepartment().getName());
         // Save department deleted
         response.setMessage("Success");
-        response.setData(existingStudent);
+        response.setData(studentResponse);
         return studentRepository.save(existingData);
     }
 
-//    private boolean validateInputStudent(String nameStudent, String genderStudent, String numberPhone){
-//        // Validasi nama harus berupa alfabet
-//        if (nameStudent.isEmpty() || genderStudent.isEmpty() || numberPhone.isEmpty()){
-//            response.setMessage("All data must be filled in");
-//            return false;
-//        }
-//
-//        if (!nameStudent.matches("^[a-zA-Z -]*$") || !genderStudent.matches("^[a-zA-Z -]*$")){
-//            response.setMessage("Can only input the alphabet");
-//            return false;
-//        }
-//
-//        if (!(genderStudent.equalsIgnoreCase("Laki-Laki")|| genderStudent.equalsIgnoreCase("Perempuan"))){
-//            response.setMessage("There only 2 Gender");
-//            return false;
-//        }
-//        return true;
-//    }
     public int generateId(){
         idNpm+=11;
         return idNpm;
