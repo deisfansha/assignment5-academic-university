@@ -32,7 +32,7 @@ public class StudentService {
     private int idNpm = 0;
 
     public Student createStudent(DtoStudentRequest studentRequest, Response response) {
-        Optional<Department> existingDepartment = departmentRepository.findById(studentRequest.getCodeDepartment());
+        Optional<Department> existingDepartment = departmentRepository.findByIdAndIsDeleteIsFalse(studentRequest.getCodeDepartment());
         List<Student> existingStudentsWithPhoneNumber = studentRepository.findByPhoneNumber(studentRequest.getPhoneNumber());
 
         if (studentRequest.getName().isEmpty()|| studentRequest.getGender().isEmpty() || studentRequest.getPhoneNumber().isEmpty()){

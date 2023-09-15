@@ -1,11 +1,18 @@
 package com.example.AcademicInformationSystem.services;
 
+import com.example.AcademicInformationSystem.dto.response.DtoStudentResponse;
 import com.example.AcademicInformationSystem.models.Department;
 import com.example.AcademicInformationSystem.models.Response;
+import com.example.AcademicInformationSystem.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,96 +20,66 @@ import java.util.Optional;
 public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
-    private Response response;
-
-    public void setResponse(Response response){
-        this.response = response;
-    }
 
     public Department createDepartment(Department department, Response response){
         Department existingDepartment = departmentRepository.findByName(department.getName());
-
-        if (!validateInput(department.getName())){
+        if (department.getName().isEmpty()){
+            response.setMessage("Name Department Must Be Filled In");
             return null;
-        }
-
-        if (existingDepartment !=null){
+        } else if (existingDepartment !=null){
             response.setMessage("Data Is Already Exists");
             return null;
         }
-        department.setDelete(false);
+
         response.setMessage("Success");
         response.setData(department);
         return departmentRepository.save(department);
     }
 
-    public List<Department> viewDepartment(){
-        return departmentRepository.findAllNotDeleted();
+    public List<Department> getAll(){
+        return departmentRepository.findByIsDeleteIsFalse();
+    }
+
+    public Page<Department> pageView(int page, int limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Department> result =  departmentRepository.findAll(pageable);
+        return new PageImpl(result.getContent(), PageRequest.of(page, limit), result.getTotalPages());
     }
 
     public Department updateDepartment(Long id, Department department, Response response) {
         Optional<Department> existingDepartment = departmentRepository.findById(id);
 
-        if (!existingDepartment.isPresent()) {
+        if (department.getName().isEmpty()){
+            response.setMessage("Name Department Is Must Be Filled In");
+            return null;
+        } else if (!existingDepartment.isPresent()){
             response.setMessage("Department Not Found");
             return null;
-        }
-
-        Department existingData = existingDepartment.get();
-
-        if (!validateInput(department.getName())){
-            return null;
-        }
-
-        String newName = department.getName().trim();
-
-        if (!newName.equalsIgnoreCase(existingData.getName())) {
-            existingData.setName(newName);
-        }else {
+        } else if (department.getName().equalsIgnoreCase(existingDepartment.get().getName())) {
             response.setMessage("Data is already exists");
             return null;
         }
 
+        existingDepartment.get().setName(department.getName());
+
         // Save department updated
         response.setMessage("Success");
         response.setData(existingDepartment);
-        return departmentRepository.save(existingData);
+        return departmentRepository.save(existingDepartment.get());
     }
 
     public Department softDelete(Long id, Response response){
         Optional<Department> existingDepartment = departmentRepository.findById(id);
-
-        if (!validateFounded(existingDepartment)){
+        if (!existingDepartment.isPresent()){
+            response.setMessage("Department Not Found");
             return null;
         }
 
-        Department existingData = existingDepartment.get();
-
-        existingData.setDelete(true);
+        existingDepartment.get().setDelete(true);
         // Save department deleted
         response.setMessage("Success");
         response.setData(existingDepartment);
-        return departmentRepository.save(existingData);
-    }
-
-    private boolean validateInput(String name){
-        if (name.isEmpty()){
-            response.setMessage("Data Must Be Filled In");
-            return false;
-        }
-        if (!name.matches("^[a-zA-Z -]*$")){
-            response.setMessage("Can only input the alphabet");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateFounded(Optional<Department> existingDepartment){
-        if (!existingDepartment.isPresent()) {
-            response.setMessage("Department Not Found");
-            return false;
-        }
-        return true;
+        return departmentRepository.save(existingDepartment.get());
     }
 
 }
