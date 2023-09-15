@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"name\": \"Deisfansha\",\r\n   \"npm\": \"NPM123456\",\r\n   \"gender\": \"Male\",\r\n   \"phoneNumber\": \"089693871389\",\r\n   \"department\": {\r\n       \"id\": 2\r\n   }\r\n}",
+							"raw": "{\r\n   \"name\": \"Tema      Mursadat\",\r\n   \"gender\": \"Laki-Laki\",\r\n   \"phone_number\": \"00000000000\",\r\n   \"code_department\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,25 +41,33 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/students/1"
+						"url": "http://localhost:8080/students/40"
 					},
 					"response": []
 				},
 				{
-					"name": "Input Score",
+					"name": "Update Student",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:8080/students/scores/1/2/3"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"Atep\",\r\n   \"phone_number\": \"00000000000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/students/100"
 					},
 					"response": []
 				},
 				{
-					"name": "Get Score Student",
+					"name": "Get All Student By Page",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "http://localhost:8080/students/23/scores"
+						"header": []
 					},
 					"response": []
 				}
@@ -82,6 +90,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Sistem Informasi\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": "http://localhost:8080/departments"
 					},
 					"response": []
@@ -91,7 +108,16 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:8080/departments/4"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/departments/2"
 					},
 					"response": []
 				},
@@ -100,7 +126,37 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/departments/3"
+						"url": "http://localhost:8080/departments/6"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Department Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/departments/page?page=0&limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"departments",
+								"page"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -125,7 +181,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"name\": \"Bahasa Inggris\"\r\n}",
+							"raw": "{\r\n   \"name\": \"Apbo\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -143,14 +199,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"name\": \"Bahasa Pemrograman\"\r\n}",
+							"raw": "{\r\n   \"name\": \"WGS\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8080/courses/4"
+						"url": "http://localhost:8080/courses/5"
 					},
 					"response": []
 				},
@@ -164,48 +220,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Quiz In Course",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\": \"Bahasa Inggris\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "http://localhost:8080/courses/quizes/7"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Course Student",
-			"item": [
-				{
-					"name": "Create Course Student",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"studentId\": 4,\r\n   \"courseId\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "http://localhost:8080/students/enroll"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Courses Student",
+					"name": "Get All Course Page",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -222,7 +237,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/departments"
+						"url": "http://localhost:8080/quizes"
 					},
 					"response": []
 				},
@@ -233,7 +248,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"name\": \"Quiz 1\"\r\n}",
+							"raw": "{\r\n        \"name\": \"Quiz 100\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -258,7 +273,152 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:8080/quizes/3"
+						"url": "http://localhost:8080/quizes/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Quiz Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/quizes/page?page=1&limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizes",
+								"page"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course Student",
+			"item": [
+				{
+					"name": "Add Course Student",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"student_id\": 100,\r\n   \"course_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/course-students"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Course Student",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Update Actived Course Student",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/course-students/12"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Course Student Page",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Score Quiz",
+			"item": [
+				{
+					"name": "Add Score",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"studentCourse\": {\r\n       \"id\": 4\r\n   },\r\n   \"quiz\": {\r\n       \"id\": 100\r\n   },\r\n   \"grade\": 80\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/scores"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Score",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"grade\": 80\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/scores/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Score Student",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/scores"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Score Student Page",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

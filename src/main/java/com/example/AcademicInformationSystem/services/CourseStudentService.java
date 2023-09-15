@@ -2,7 +2,6 @@ package com.example.AcademicInformationSystem.services;
 
 import com.example.AcademicInformationSystem.dto.request.DtoStudentCourseRequest;
 import com.example.AcademicInformationSystem.dto.response.DtoStudentCourseResponse;
-import com.example.AcademicInformationSystem.dto.response.DtoStudentResponse;
 import com.example.AcademicInformationSystem.models.Course;
 import com.example.AcademicInformationSystem.models.CourseStudents;
 import com.example.AcademicInformationSystem.models.Response;
@@ -30,6 +29,14 @@ public class CourseStudentService {
     @Autowired
     private CourseRepository courseRepository;
 
+    /**
+     * Menambahkan Data Mahasiswa Yang Mengambil Mata Kuliah.
+     *
+     * @param courseStudent     Mata kuliah dan Mahasiswa yang akan ditambahkan.
+     * @param response          pesan untuk ditampilkan pada api,
+     * @return                  Data Mata kuliah dan Mahasiswa jika berhasil ditambahkan dan bernilai true,
+     *                          false jika gagal.
+     */
     public Boolean addStudentCourse(DtoStudentCourseRequest courseStudent, Response response) {
         Optional<Student> existingStudent = studentRepository.findByIdAndIsDeleteIsFalse(courseStudent.getStudentId());
         Optional<Course> existingCourse = courseRepository.findByIdAndIsDeleteIsFalse(courseStudent.getCourseId());
@@ -61,6 +68,11 @@ public class CourseStudentService {
         return true;
     }
 
+    /**
+     * Mendapatkan Data Mahasiswa dan Mata Kuliah.
+     *
+     * @return              Data Mahasiswa yang mengambil mata kuliah.
+     */
     public List<DtoStudentCourseResponse> getAll(){
         List<CourseStudents> courseStudents = courseStudentRepository.findAllByIsDeletedIsFalseAndIsActiveTrue();
         List<DtoStudentCourseResponse> courseStudentList = new ArrayList<>();
@@ -75,6 +87,12 @@ public class CourseStudentService {
         return courseStudentList;
     }
 
+    /**
+     *
+     * @param page      custom nomor halaman
+     * @param limit     custom data yang ditampilkan pada setiap page
+     * @return          data page Mahasiswa yang mengambil mata kuliah berdasarkan isDelete = false.
+     */
     public Page<DtoStudentCourseResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
         Page<CourseStudents> result =  courseStudentRepository.findAllByIsDeletedIsFalseOrderByIdAsc(pageable);
@@ -89,10 +107,15 @@ public class CourseStudentService {
         return new PageImpl(courseStudentList, PageRequest.of(page, limit), result.getTotalPages());
     }
 
-    public CourseStudents getById(Long id){
-        return courseStudentRepository.findById(id).get();
-    }
-
+    /**
+     * Mengubah Data Mahasiswa Yang Mengambil Mata Kuliah.
+     *
+     * @param id                Id Student Course yang akan diubah,
+     * @param courseStudents    Mengubah data status,
+     * @param response          pesan untuk ditampilkan pada api,
+     * @return                  Data Mata kuliah dan Mahasiswa jika berhasil ditambahkan dan bernilai true,
+     *                          false jika gagal.
+     */
     public Boolean updateActive(Long id, CourseStudents courseStudents, Response response){
         Optional<CourseStudents> existingCourseStudent = courseStudentRepository.findById(id);
 

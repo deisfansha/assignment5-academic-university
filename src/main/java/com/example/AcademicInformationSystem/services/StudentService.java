@@ -31,6 +31,13 @@ public class StudentService {
     private QuizRepository quizRepository;
     private int idNpm = 0;
 
+    /**
+     * Menambahkan Data Mahasiswa.
+     *
+     * @param studentRequest    Data Mahasiswa yang akan ditambahkan.
+     * @param response          pesan yang akan ditampilkan pada api,
+     * @return                  Data Mahasiswa jika berhasil ditambahkan dan null jika gagal.
+     */
     public Student createStudent(DtoStudentRequest studentRequest, Response response) {
         Optional<Department> existingDepartment = departmentRepository.findByIdAndIsDeleteIsFalse(studentRequest.getCodeDepartment());
         List<Student> existingStudentsWithPhoneNumber = studentRepository.findByPhoneNumber(studentRequest.getPhoneNumber());
@@ -88,6 +95,12 @@ public class StudentService {
         return studentList;
     }
 
+    /**
+     *
+     * @param page      custom nomor halaman
+     * @param limit     custom data yang ditampilkan pada setiap page
+     * @return          data page Mahasiswa beserta jurusan yang diambil.
+     */
     public Page<DtoStudentResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
         Page<Student> result =  studentRepository.findAllByIsDeleteIsFalseOrderByNameAsc(pageable);
@@ -99,6 +112,15 @@ public class StudentService {
         return new PageImpl(studentList, PageRequest.of(page, limit), result.getTotalPages());
     }
 
+    /**
+     * Mengubah Data Mahasiswa.
+     *
+     * @param id                ID Mahasiswa yang akan diubah,
+     * @param studentRequest    Mengubah data mahasiswa,
+     * @param response          pesan untuk ditampilkan pada api,
+     * @return                  Data Skor Mahasiswa jika berhasil diubah dan bernilai true, false jika gagal.
+     *
+     */
     public Boolean updateStudent(Long id, DtoStudentRequest studentRequest,Response response){
         Optional<Student> existingStudent = studentRepository.findById(id);
 
@@ -124,10 +146,13 @@ public class StudentService {
         return true;
     }
 
-    public Student getStudentById(Long id){
-        return studentRepository.findById(id).get();
-    }
-
+    /**
+     * Menghapus secara halus data mahasiswa.
+     *
+     * @param id        ID Mahasiswa yang akan dihapus
+     * @param response  pesan untuk ditampilkan pada api,
+     * @return          Data Mahasiswa jika berhasil dihapus, null jika gagal.
+     */
     public Student softDelete(Long id, Response response){
         Optional<Student> existingStudent = studentRepository.findById(id);
 

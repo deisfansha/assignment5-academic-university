@@ -29,6 +29,15 @@ public class ScoreService {
     @Autowired
     private QuizRepository quizRepository;
 
+
+    /**
+     * Menambahkan Data Score Mahasiswa.
+     *
+     * @param scoreRequest   Data skor mahasiswa yang akan ditambahkan.
+     * @param response       Pesan yang akan ditampilkan pada api,
+     * @return               Data skor mahasiswa jika berhasil ditambahkan dan bernilai true
+     *                       false jika gagal.
+     */
     public Boolean addScore(DtoScoreRequest scoreRequest, Response response) {
         Optional<CourseStudents> existingCourseStudent = courseStudentRepository.findByIdAndIsDeletedIsFalseAndIsActiveIsTrue(scoreRequest.getStudentCourseId());
         Optional<Quiz> existingQuiz = quizRepository.findByIdAndIsDeleteIsFalse(scoreRequest.getQuizId());
@@ -65,6 +74,15 @@ public class ScoreService {
         return true;
     }
 
+    /**
+     * Mengubah Skor Mahasiswa.
+     *
+     * @param id                ID Skor Mahasiswa yang akan diubah,
+     * @param scoreRequest        Mengubah skor quiz mahasiswa,
+     * @param response          pesan untuk ditampilkan pada api,
+     * @return                  Data Skor Mahasiswa jika berhasil diubah dan bernilai true, false jika gagal.
+     *
+     */
     public Boolean updateScore(Long id, DtoScoreRequest scoreRequest, Response response) {
         Optional<Score> existingScore = scoreRepository.findById(id);
 
@@ -88,10 +106,11 @@ public class ScoreService {
         return true;
     }
 
-    public Score getById(Long id){
-        return scoreRepository.findById(id).get();
-    }
-
+    /**
+     * Mendapatkan Data Skor Mahasiswa.
+     *
+     * @return         Data Mahasiswa berdasarkan isDelete = false.
+     */
     public List<DtoScoreResponse> getAll(){
         List<Score> score = scoreRepository.findAll();
         List<DtoScoreResponse> scoreList = new ArrayList<>();
@@ -108,6 +127,12 @@ public class ScoreService {
         return scoreList;
     }
 
+    /**
+     *
+     * @param page      custom nomor halaman
+     * @param limit     custom data yang ditampilkan pada setiap page
+     * @return          data page Skor quiz mahasiswa.
+     */
     public Page<DtoScoreResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
         Page<Score> result =  scoreRepository.findAllByOrderByIdAsc(pageable);

@@ -19,8 +19,6 @@ public interface CourseRepository extends JpaRepository <Course, Long> {
     Optional<Course> findByName(String name);
     Optional<Course> findByIdAndIsDeleteIsFalse(Long courseId);
     List<Course> findByIsDeleteIsFalse();
-    @Query("SELECT c FROM Course c WHERE c.isDelete = false AND c.id = :id")
-    List<Course> findByIdCourse(@Param("id")Long id);
     Page<Course> findAllByIsDeleteIsFalseOrderByNameAsc(Pageable pageable);
 
 

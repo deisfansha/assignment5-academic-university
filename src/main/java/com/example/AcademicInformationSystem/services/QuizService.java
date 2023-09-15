@@ -19,6 +19,13 @@ public class QuizService {
     @Autowired
     private QuizRepository quizRepository;
 
+    /**
+     * Menambahkan Data Quiz.
+     *
+     * @param quiz           quiz yang akan ditambahkan.
+     * @param response       pesan yang akan ditampilkan pada api,
+     * @return               Data quiz jika berhasil ditambahkan dan null jika gagal.
+     */
     public Quiz createQuiz(Quiz quiz, Response response){
         List<Quiz> existingQuiz = quizRepository.findByNameAndIsDeleteFalse(quiz.getName());
 
@@ -31,16 +38,36 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
+    /**
+     * Mendapatkan Data Quiz.
+     *
+     * @return         Data Quiz berdasarkan isDelete = false.
+     */
     public List<Quiz> viewQuiz(){
         return quizRepository.findByIsDeleteIsFalse();
     }
 
+    /**
+     *
+     * @param page      custom nomor halaman
+     * @param limit     custom data yang ditampilkan pada setiap page
+     * @return          data page Quiz berdasarkan isDelete = false.
+     */
     public Page<Quiz> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
         Page<Quiz> result =  quizRepository.findAllByIsDeleteIsFalseOrderByIdAsc(pageable);
         return new PageImpl(result.getContent(), PageRequest.of(page, limit), result.getTotalPages());
     }
 
+    /**
+     * Mengubah Data Quiz.
+     *
+     * @param id                ID Quiz yang akan diubah,
+     * @param quiz              Data nama quiz yang akan diubah,
+     * @param response          pesan untuk ditampilkan pada api,
+     * @return                  Quiz jika berhasil diubah dan null jika gagal.
+     *
+     */
     public Quiz updateQuiz(Long id, Quiz quiz, Response response) {
         Optional<Quiz> existingQuiz = quizRepository.findById(id);
 
@@ -63,6 +90,13 @@ public class QuizService {
         return quizRepository.save(existingQuiz.get());
     }
 
+    /**
+     * Menghapus secara halus Data Quiz.
+     *
+     * @param id        ID Quiz yang akan dihapus
+     * @param response  pesan untuk ditampilkan pada api,
+     * @return          Data Quiz jika berhasil dihapus, null jika gagal.
+     */
     public Quiz softDelete(Long id, Response response){
         Optional<Quiz> existingQuiz = quizRepository.findById(id);
 
