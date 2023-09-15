@@ -10,7 +10,7 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     public Long getId() {
         return id;
@@ -25,7 +25,7 @@ public class Quiz {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     @JsonIgnore

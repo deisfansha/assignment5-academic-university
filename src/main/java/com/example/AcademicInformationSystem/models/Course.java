@@ -11,7 +11,7 @@ public class Course {
     private Long id;
     private String name;
     private Boolean isActive = true;
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     public Course(){
 
@@ -35,7 +35,7 @@ public class Course {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
     @JsonIgnore
     public Boolean getActive() {

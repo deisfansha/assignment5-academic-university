@@ -14,7 +14,5 @@ import java.util.Optional;
 public interface DepartmentRepository  extends JpaRepository <Department, Long>{
     List<Department> findByIsDeleteIsFalse();
     Optional<Department> findByIdAndIsDeleteIsFalse(Long idDepartment);
-    @Query("SELECT d FROM Department d WHERE d.isDelete = false AND d.name = :name")
-    Department findByName(String name);
-
+    Optional<Department> findByNameAndIsDeleteIsFalse(String name);
 }

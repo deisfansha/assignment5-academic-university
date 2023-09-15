@@ -75,7 +75,4 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
-
-
-
 }

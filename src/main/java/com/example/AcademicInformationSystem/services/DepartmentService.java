@@ -1,9 +1,7 @@
 package com.example.AcademicInformationSystem.services;
 
-import com.example.AcademicInformationSystem.dto.response.DtoStudentResponse;
 import com.example.AcademicInformationSystem.models.Department;
 import com.example.AcademicInformationSystem.models.Response;
-import com.example.AcademicInformationSystem.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.AcademicInformationSystem.repositories.DepartmentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +19,15 @@ public class DepartmentService {
     private DepartmentRepository departmentRepository;
 
     public Department createDepartment(Department department, Response response){
-        Department existingDepartment = departmentRepository.findByName(department.getName());
+        Optional<Department> existingDepartment = departmentRepository.findByNameAndIsDeleteIsFalse(department.getName());
+        System.out.println(existingDepartment);
         if (department.getName().isEmpty()){
             response.setMessage("Name Department Must Be Filled In");
             return null;
-        } else if (existingDepartment !=null){
+        } else if (existingDepartment.isPresent()){
             response.setMessage("Data Is Already Exists");
             return null;
         }
-
-        response.setMessage("Success");
         response.setData(department);
         return departmentRepository.save(department);
     }

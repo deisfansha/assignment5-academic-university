@@ -28,7 +28,7 @@ public class ScoreService {
 
     public Boolean addScore(DtoScoreRequest scoreRequest, Response response) {
         Optional<CourseStudents> existingCourseStudent = courseStudentRepository.findById(scoreRequest.getStudentCourseId());
-        Optional<Quiz> existingQuiz = quizRepository.findById(scoreRequest.getQuizId());
+        Optional<Quiz> existingQuiz = quizRepository.findByIdAndIsDeleteIsFalse(scoreRequest.getQuizId());
 
         if (!existingCourseStudent.isPresent() || !existingCourseStudent.get().getActive()){
             response.setMessage("Course Student Not Found");

@@ -1,9 +1,11 @@
 package com.example.AcademicInformationSystem.controllers;
 
+import com.example.AcademicInformationSystem.models.Department;
 import com.example.AcademicInformationSystem.models.Quiz;
 import com.example.AcademicInformationSystem.models.Response;
 import com.example.AcademicInformationSystem.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,11 @@ public class QuizController {
     @PostMapping("")
     public ResponseEntity saveQuiz(@RequestBody Quiz quiz){
         Quiz newQuiz = quizService.createQuiz(quiz, response);
-        quizService.setResponse(response);
         if (newQuiz == null){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
+            response.setMessage("Success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
@@ -41,13 +44,28 @@ public class QuizController {
         }
     }
 
+    @GetMapping("/page")
+    public ResponseEntity pageViewAll(@RequestParam int page, @RequestParam int limit){
+        Page<Quiz> quizList = quizService.pageView(page, limit);
+        if (quizList.isEmpty()){
+            response.setMessage("Data Is Empty");
+            response.setData(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            response.setData(quizList);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity updatedQuiz(@PathVariable Long id, @RequestBody Quiz quiz){
         Quiz newQuiz = quizService.updateQuiz(id, quiz, response);
-        quizService.setResponse(response);
         if (newQuiz == null){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
+            response.setMessage("Success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
@@ -55,10 +73,11 @@ public class QuizController {
     @DeleteMapping("/{id}")
     public ResponseEntity softDeletedQuiz(@PathVariable Long id){
         Quiz newQuiz = quizService.softDelete(id, response);
-        quizService.setResponse(response);
         if (newQuiz == null){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
+            response.setMessage("Success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
