@@ -11,6 +11,10 @@ import com.example.AcademicInformationSystem.repositories.CourseRepository;
 import com.example.AcademicInformationSystem.repositories.CourseStudentRepository;
 import com.example.AcademicInformationSystem.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +31,8 @@ public class CourseStudentService {
     private CourseRepository courseRepository;
 
     public Boolean addStudentCourse(DtoStudentCourseRequest courseStudent, Response response) {
-        Optional<Student> existingStudent = studentRepository.findById(courseStudent.getStudentId());
-        Optional<Course> existingCourse = courseRepository.findById(courseStudent.getCourseId());
+        Optional<Student> existingStudent = studentRepository.findByIdAndIsDeleteIsFalse(courseStudent.getStudentId());
+        Optional<Course> existingCourse = courseRepository.findByIdAndIsDeleteIsFalse(courseStudent.getCourseId());
 
         if (!existingStudent.isPresent()){
             response.setMessage("Student Not Found");
@@ -58,7 +62,7 @@ public class CourseStudentService {
     }
 
     public List<DtoStudentCourseResponse> getAll(){
-        List<CourseStudents> courseStudents = courseStudentRepository.findAllByIsDeletedIsTrueAndIsActiveTrue();
+        List<CourseStudents> courseStudents = courseStudentRepository.findAllByIsDeletedIsFalseAndIsActiveTrue();
         List<DtoStudentCourseResponse> courseStudentList = new ArrayList<>();
 
         for (CourseStudents courseStudent: courseStudents){
@@ -69,6 +73,20 @@ public class CourseStudentService {
             courseStudentList.add(studentCourseData);
         }
         return courseStudentList;
+    }
+
+    public Page<DtoStudentCourseResponse> pageView(int page, int limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<CourseStudents> result =  courseStudentRepository.findAll(pageable);
+        List<DtoStudentCourseResponse> courseStudentList = new ArrayList<>();
+        for (CourseStudents courseStudent: result.getContent()){
+            DtoStudentCourseResponse studentCourseData = new DtoStudentCourseResponse(courseStudent.getStudent().getNpm(),
+                    courseStudent.getStudent().getName(), courseStudent.getStudent().getDepartment().getName(),
+                    courseStudent.getCourse().getName(),
+                    courseStudent.getActive());
+            courseStudentList.add(studentCourseData);
+        }
+        return new PageImpl(courseStudentList, PageRequest.of(page, limit), result.getTotalPages());
     }
 
     public CourseStudents getById(Long id){

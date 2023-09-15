@@ -58,12 +58,12 @@ public class StudentService {
         // Ambil ID mahasiswa
         List<Student> students = studentRepository.findLast();
         Student lastStudent = students.get(0);
+
         String last = String.valueOf(lastStudent.getId());
+        int codeNpm = Integer.parseInt(last) +1;
 
         // Get Year Now
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int codeNpm = Integer.parseInt(last) +1;
-
         // Set NPM
         String npm = studentRequest.getCodeDepartment() + String.valueOf(currentYear) + "00"+codeNpm;
 

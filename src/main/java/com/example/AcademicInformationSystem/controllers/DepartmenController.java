@@ -50,6 +50,7 @@ public class DepartmenController {
         Page<Department> departmentList = departmentService.pageView(page, limit);
         if (departmentList.isEmpty()){
             response.setMessage("Data Is Empty");
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");

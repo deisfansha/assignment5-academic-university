@@ -51,6 +51,7 @@ public class CourseController {
         Page<Course> courseList = courseService.pageView(page, limit);
         if (courseList.isEmpty()){
             response.setMessage("Data Is Empty");
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");

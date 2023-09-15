@@ -11,6 +11,10 @@ import com.example.AcademicInformationSystem.repositories.CourseStudentRepositor
 import com.example.AcademicInformationSystem.repositories.QuizRepository;
 import com.example.AcademicInformationSystem.repositories.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +31,7 @@ public class ScoreService {
     private QuizRepository quizRepository;
 
     public Boolean addScore(DtoScoreRequest scoreRequest, Response response) {
-        Optional<CourseStudents> existingCourseStudent = courseStudentRepository.findById(scoreRequest.getStudentCourseId());
+        Optional<CourseStudents> existingCourseStudent = courseStudentRepository.findByIdAndIsDeletedIsFalseAndIsActiveIsTrue(scoreRequest.getStudentCourseId());
         Optional<Quiz> existingQuiz = quizRepository.findByIdAndIsDeleteIsFalse(scoreRequest.getQuizId());
 
         if (!existingCourseStudent.isPresent() || !existingCourseStudent.get().getActive()){
@@ -104,6 +108,22 @@ public class ScoreService {
             scoreList.add(scoreResponse);
         }
         return scoreList;
+    }
+
+    public Page<DtoScoreResponse> pageView(int page, int limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Score> result =  scoreRepository.findAll(pageable);
+        List<DtoScoreResponse> scoreList = new ArrayList<>();
+        for (Score scoreData: result.getContent()){
+            DtoScoreResponse scoreResponse = new DtoScoreResponse(
+                    scoreData.getCourseStudents().getStudent().getNpm(),
+                    scoreData.getCourseStudents().getStudent().getName(),
+                    scoreData.getCourseStudents().getStudent().getDepartment().getName(),
+                    scoreData.getCourseStudents().getCourse().getName(),
+                    scoreData.getQuiz().getName(),scoreData.getGrade());
+            scoreList.add(scoreResponse);
+        }
+        return new PageImpl(scoreList, PageRequest.of(page, limit), result.getTotalPages());
     }
 
 }

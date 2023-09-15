@@ -21,6 +21,7 @@ public class StudentController {
     public ResponseEntity saveStudent(@RequestBody DtoStudentRequest studentRequest){
         Student newStudent = studentService.createStudent(studentRequest, response);
         if (newStudent == null){
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");
@@ -46,6 +47,7 @@ public class StudentController {
         Page<DtoStudentResponse> studentList = studentService.pageView(page, limit);
         if (studentList.isEmpty()){
             response.setMessage("Data Is Empty");
+            response.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }else {
             response.setMessage("Success");

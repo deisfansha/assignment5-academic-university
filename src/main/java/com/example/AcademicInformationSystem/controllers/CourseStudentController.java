@@ -1,11 +1,14 @@
 package com.example.AcademicInformationSystem.controllers;
 
 import com.example.AcademicInformationSystem.dto.request.DtoStudentCourseRequest;
+import com.example.AcademicInformationSystem.dto.response.DtoStudentCourseResponse;
 import com.example.AcademicInformationSystem.models.CourseStudents;
+import com.example.AcademicInformationSystem.models.Department;
 import com.example.AcademicInformationSystem.models.Response;
 import com.example.AcademicInformationSystem.models.Student;
 import com.example.AcademicInformationSystem.services.CourseStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,6 +45,20 @@ public class CourseStudentController {
         }else {
             response.setMessage("Success");
             response.setData(courseStudentService.getAll());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity pageViewAll(@RequestParam int page, @RequestParam int limit){
+        Page<DtoStudentCourseResponse> courseStudentList = courseStudentService.pageView(page, limit);
+        if (courseStudentList.isEmpty()){
+            response.setMessage("Data Is Empty");
+            response.setData(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }else {
+            response.setMessage("Success");
+            response.setData(courseStudentList);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
