@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "score_quiz")
-public class Score {
+public class Score extends BaseClass{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

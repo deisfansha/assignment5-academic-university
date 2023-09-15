@@ -38,7 +38,7 @@ public class DepartmentService {
 
     public Page<Department> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Department> result =  departmentRepository.findAll(pageable);
+        Page<Department> result =  departmentRepository.findAllByIsDeleteIsFalseOrderByIdAsc(pageable);
         return new PageImpl(result.getContent(), PageRequest.of(page, limit), result.getTotalPages());
     }
 

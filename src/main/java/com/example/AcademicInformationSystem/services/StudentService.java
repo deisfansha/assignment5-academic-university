@@ -90,7 +90,7 @@ public class StudentService {
 
     public Page<DtoStudentResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Student> result =  studentRepository.findAll(pageable);
+        Page<Student> result =  studentRepository.findAllByIsDeleteIsFalseOrderByNameAsc(pageable);
         List<DtoStudentResponse> studentList = new ArrayList<>();
         for (Student students: result.getContent()){
             DtoStudentResponse studentResponse = new DtoStudentResponse(students.getNpm(), students.getName(), students.getGender(), students.getPhoneNumber(), students.getDepartment().getName());

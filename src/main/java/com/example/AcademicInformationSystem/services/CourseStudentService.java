@@ -77,7 +77,7 @@ public class CourseStudentService {
 
     public Page<DtoStudentCourseResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<CourseStudents> result =  courseStudentRepository.findAll(pageable);
+        Page<CourseStudents> result =  courseStudentRepository.findAllByIsDeletedIsFalseOrderByIdAsc(pageable);
         List<DtoStudentCourseResponse> courseStudentList = new ArrayList<>();
         for (CourseStudents courseStudent: result.getContent()){
             DtoStudentCourseResponse studentCourseData = new DtoStudentCourseResponse(courseStudent.getStudent().getNpm(),

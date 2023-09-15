@@ -2,7 +2,6 @@ package com.example.AcademicInformationSystem.services;
 
 import com.example.AcademicInformationSystem.dto.request.DtoScoreRequest;
 import com.example.AcademicInformationSystem.dto.response.DtoScoreResponse;
-import com.example.AcademicInformationSystem.dto.response.DtoStudentCourseResponse;
 import com.example.AcademicInformationSystem.models.CourseStudents;
 import com.example.AcademicInformationSystem.models.Quiz;
 import com.example.AcademicInformationSystem.models.Response;
@@ -77,7 +76,6 @@ public class ScoreService {
             return false;
         }
 
-        Score score = new Score();
         existingScore.get().setGrade(scoreRequest.getGrade());
         scoreRepository.save(existingScore.get());
 
@@ -112,7 +110,7 @@ public class ScoreService {
 
     public Page<DtoScoreResponse> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Score> result =  scoreRepository.findAll(pageable);
+        Page<Score> result =  scoreRepository.findAllByOrderByIdAsc(pageable);
         List<DtoScoreResponse> scoreList = new ArrayList<>();
         for (Score scoreData: result.getContent()){
             DtoScoreResponse scoreResponse = new DtoScoreResponse(

@@ -43,7 +43,7 @@ public class CourseService {
 
     public Page<Course> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Course> result =  courseRepository.findAll(pageable);
+        Page<Course> result =  courseRepository.findAllByIsDeleteIsFalseOrderByNameAsc(pageable);
         return new PageImpl(result.getContent(), PageRequest.of(page, limit), result.getTotalPages());
     }
 

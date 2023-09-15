@@ -1,13 +1,19 @@
 package com.example.AcademicInformationSystem.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "student_course")
-public class CourseStudents {
+public class CourseStudents extends BaseClass{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +25,11 @@ public class CourseStudents {
     private Course course;
 
     private Boolean isActive = true;
-    private Boolean isDeleted = true;
+    private Boolean isDeleted = false;
 
     public CourseStudents(){
 
     }
-
     public CourseStudents(Long id, Student student, Course course) {
         this.id = id;
         this.student = student;

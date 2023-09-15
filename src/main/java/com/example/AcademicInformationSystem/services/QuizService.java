@@ -37,7 +37,7 @@ public class QuizService {
 
     public Page<Quiz> pageView(int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Quiz> result =  quizRepository.findAll(pageable);
+        Page<Quiz> result =  quizRepository.findAllByIsDeleteIsFalseOrderByIdAsc(pageable);
         return new PageImpl(result.getContent(), PageRequest.of(page, limit), result.getTotalPages());
     }
 
